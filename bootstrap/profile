@@ -1,0 +1,17 @@
+# profile
+# vim:ft=sh
+
+# XDG directories
+export XDG_CONFIG_HOME="$HOME/etc"
+export XDG_CACHE_HOME="$HOME/var/cache"
+export XDG_DATA_HOME="$HOME/usr/share"
+
+export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
+
+# source files in $XDG_CONFIG_HOME/profile
+if [ -d "$XDG_CONFIG_HOME/profile" ]; then
+	for file in "$XDG_CONFIG_HOME"/profile/*.sh; do
+		[ -r "$file" ] && . "$file"
+	done
+fi

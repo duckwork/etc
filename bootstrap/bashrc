@@ -1,0 +1,41 @@
+# bashrc
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+BASH_SOURCE_FIRST=(
+    aliases
+    functions
+)
+
+BASH_SOURCE_LAST=(
+    blesh
+)
+
+for f in "${BASH_SOURCE_FIRST[@]}"; do
+    file="${XDG_CONFIG_HOME:-$HOME/.config}/bash/$f.bash"
+    [[ -r "$file" ]] && source "$file" # || echo >&2 "no '$file' found"
+done
+
+for file in "$XDG_CONFIG_HOME"/bash/*.bash; do
+    file_base="${file##*/}"
+    memq "${file_base%.bash}" "${BASH_SOURCE_FIRST[@]}" && {
+        # echo >&2 "'$file' in BASH_SOURCE_FIRST, skipping"
+        continue
+    }
+    memq "${file_base%.bash}" "${BASH_SOURCE_LAST[@]}" && {
+        # echo >&2 "'$file' in BASH_SOURCE_LAST, skipping"
+        continue
+    }
+    [[ -r "$file" ]] && {
+        # echo >&2 "Sourcing '$file'"
+        source "$file"
+    }
+    unset file_base
+done
+
+for f in "${BASH_SOURCE_LAST[@]}"; do
+    file="${XDG_CONFIG_HOME:-$HOME/.config}/bash/$f.bash"
+    [[ -r "$file" ]] && source "$file" # || echo >&2 "no '$file' found"
+    true
+done

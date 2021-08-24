@@ -1,0 +1,22 @@
+# inputrc
+
+# Include the system inputrc
+$include /etc/inputrc
+
+# Search based on what I've already typed
+"\C-p":history-search-backward
+"\C-n":history-search-forward
+
+# Show completions using LS_COLORS
+set colored-stats On
+# Ignore case in completions
+set completion-ignore-case On
+# Show ... if common prefix is longer than 3 characters
+set completion-prefix-display-length 3
+# Show symlinked directories with a slash
+set mark-symlinked-directories On
+# Show completions immediately
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+# Show types (like ls -F)
+set visible-stats On

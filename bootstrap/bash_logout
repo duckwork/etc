@@ -1,0 +1,6 @@
+# bash_logout
+# vim:ft=sh
+
+if [[ -r "$XDG_CONFIG_HOME"/bash/logout ]]; then
+	source "$XDG_CONFIG_HOME"/bash/logout
+fi
