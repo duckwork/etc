@@ -1,3 +1,4 @@
 export GUIX_PROFILE="$HOME/.config/guix/current"
 
-. "$GUIX_PROFILE/etc/profile"
+[ -r "$GUIX_PROFILE/etc/profile" ] && 
+	. "$GUIX_PROFILE/etc/profile"
