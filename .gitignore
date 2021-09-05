@@ -1,0 +1,31 @@
+### ~/etc/.gitignore
+
+# Author: Case Duckworth <acdw@acdw.net>
+
+### License:
+
+# Everyone is permitted to do whatever with this software, without limitation.
+# This software comes without any warranty whatsoever, but with two pieces of
+# advice:
+#
+# - Don't hurt yourself.
+# - Make good choices.
+
+### Commentary:
+
+# This .gitignore takes advantage of the fact that git-ignore(1) doesn't ignore
+# previously-added files, or new files added with git add -f.  So by ignoring
+# everything (the single rule, "*", below), we can't accidentally track
+# anything we don't want to (now that ~/.config is a convention, badly-behaved
+# programs throw all kinds of shit in /there/ ... is it better than throwing it
+# in ~ ?  Maybe ...), while still keeping track of any changes in the files
+# that are important.
+
+# To add a file to the database, you'll have to use git add -f.  With the
+# standard git configuration (at least the one I have at the moment), it'll
+# remind you if you forget.
+
+### Code:
+
+# Ignore everything.
+*
