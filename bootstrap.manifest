@@ -1,0 +1,19 @@
+### bootstrap.manifest -*- conf -*-
+# TAB-separated SOURCEs and DESTINATIONs for configuration-file links to ~.
+# see bootstrap.sh for details.
+
+# Custom XDG Directories (just in case they're hardcoded somewhere)
+~/etc	~/.config
+~/usr	~/.local
+
+# Bash
+bash/bashrc	~/.bashrc
+bash/bash_profile	~/.bash_profile
+bash/bash_logout	~/.bash_logout
+
+# Profile
+profile/profile	~/.profile
+
+# Local Variables:
+# indent-tabs-mode: t
+# End:
