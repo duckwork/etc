@@ -1,0 +1,54 @@
+" vimrc
+" see https://github.com/liuchengxu/vim-better-default/
+
+set autowrite
+set backupdir=/tmp//,.
+set directory=/tmp//,.
+set expandtab
+set fileformats=unix,dos,mac
+set fillchars=stl:\ ,stlnc:\ ,fold:\ ,vert:│
+set hidden
+set ignorecase
+set linespace=0
+set matchtime=5
+set mousehide
+set nobackup
+set noswapfile
+set nowrap
+set nowritebackup
+set number
+set pumheight=20
+set report=0
+set ruler
+set scrolljump=5
+set scrolloff=3
+set shiftwidth=4
+set shortmess=atOI
+set showcmd
+set showmatch
+set showmode
+set smartcase
+set softtabstop=4
+set splitbelow
+set splitright
+set tabstop=4
+set whichwrap+=<,>,h,l
+set wildignore+=*/tmp/*,*.o,*.obj,*.so
+set wildignore+=*\\tmp\\*,*.exe
+set wildignore+=*swp,*.class,*.pyc,*.png,*.jpg,*.gif,*.zip
+set wildmode=list:longest,full
+set winminheight=0
+
+if v:version >= 703
+set undodir=/tmp//,.
+endif
+if has('unnamedplus')
+set clipboard=unnamedplus,unnamed
+else
+set clipboard+=unnamed
+endif
+if has('persistent_undo')
+set undofile
+set undolevels=1000
+set undoreload=10000
+endif
