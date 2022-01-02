@@ -14,6 +14,9 @@ bash/bash_logout	~/.bash_logout
 # Profile
 profile/profile	~/.profile
 
+# Mail
+mail/mbsyncrc	~/.mbsyncrc
+
 # Local Variables:
 # indent-tabs-mode: t
 # End:
