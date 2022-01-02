@@ -88,3 +88,5 @@
 	insteadOf = "tg:"
 [url "git@tildegit.org:"]
 	pushInsteadOf = "tg:"	
+[gitea "tildegit.org/api/v1"]
+	user = acdw
