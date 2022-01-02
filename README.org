@@ -1,0 +1,44 @@
+#+TITLE: My configurations
+#+AUTHOR: Case Duckworth
+
+Here are my system configurations.  There are many like them but these are mine.
+
+* Installation
+
+Clone this repo to ~$XDG_CONFIG_HOME~, which in [[https://github.com/duckwork/etc/blob/main/profile/profile][profile/profile]] I've set to
+~$HOME/etc~.  See that file for other XDG directories I've set to non-standard
+places.  (Just in case something hard-codes ~$XDG_CONFIG_HOME~, I also symlink
+them in =bootstrap.sh=, which see below.)
+
+Instead of GNU Stow or a Makefile, I use a short =bootstrap.sh= script that reads
+=bootstrap.manifest=, a tab-separated file mapping repo paths to paths in ~$HOME~.
+It only contains files for programs that [[https://wiki.archlinux.org/title/XDG_Base_Directory#Support][aren't XDG-compliant]], so it should stay
+short.
+
+Anyway, run =bootstrap.sh= in this directory and you should be set.
+
+* Programs to install
+
+** Required
+
+- bash + readline :: I prefer this shell over others, since I don't do anything
+  super wild in the terminal nowadays anyway
+- git :: Kind of required to do anything with this repo
+- keychain :: Manages =ssh-agent=
+
+** Extra
+
+- mbsync :: For mail.
+
+* Notes
+
+- My [[https://tildegit.org/acdw/emacs][emacs configuration is elsewhere]], but it goes in ~$XDG_CONFIG_HOME~ as well.
+
+* License
+
+Everyone is permitted to do whatever with this software, without limitation.
+This software comes without any warranty whatsoever, but with two pieces of
+advice:
+
+- Don't hurt yourself.
+- Make good choices.
