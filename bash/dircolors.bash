@@ -1,1 +1,5 @@
-eval $(dircolors --sh "${XDG_CONFIG_HOME:-$HOME/.config}/dircolors")
+DIRCOLORS="${XDG_CONFIG_HOME:-$HOME/.config/dircolors}"
+
+if [ -f "$DIRCOLORS" ]; then
+    eval $(dircolors --sh "$DIRCOLORS");
+fi
