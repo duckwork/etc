@@ -29,165 +29,173 @@
 ### Main entry point
 
 main() {
-		## Sanity checking
-		# Since bootstrap.sh does some naive path-mangling, let's show an error
-		# if it's not run correctly.  Yes, there are other ways to run a
-		# script.  But this script should ideally be run, like, one time.  Also
-		# you can obviously comment this out or change it if you know what
-		# you're doing!
+    ## Sanity checking
+    # Since bootstrap.sh does some naive path-mangling, let's show an error
+    # if it's not run correctly.  Yes, there are other ways to run a
+    # script.  But this script should ideally be run, like, one time.  Also
+    # you can obviously comment this out or change it if you know what
+    # you're doing!
 
-		case "$0" in
-		./*) ;; # this is the way bootstrap.sh /should/ be run.
-		*)
-				printf >&2 'Weird invocation! %s\n' "$*"
-				printf >&2 'Try: cd <bootstrap-dir>; ./bootstrap.sh\n'
-				exit 127
-				;;
-		esac
+    case "$0" in
+        ./*) ;; # this is the way bootstrap.sh /should/ be run.
+        *)
+            printf >&2 'Weird invocation! %s\n' "$*"
+            printf >&2 'Try: cd <bootstrap-dir>; ./bootstrap.sh\n'
+            exit 127
+            ;;
+    esac
 
-		## Variables
+    ## Variables
 
-		# option: -d/--dry-run
-		: "${BOOTSTRAP_ACTION:=link}"
-		# option: -v/--verbose
-		: "${BOOTSTRAP_DEBUG:=false}"
-		# option: -k/--keep-going
-		: "${BOOTSTRAP_QUIT_ON_ERROR:=true}"
-		# option: -m/--manifest FILE
-		: "${BOOTSTRAP_MANIFEST_FILE:=bootstrap.manifest}"
-		# option: -- (rest are passed to ln)
-		: "${BOOTSTRAP_LN_ARGS:=-s}"
-		
-		## Handle command-line flags
-		# Basically an easier way of setting the above variables.
-		while [ -n "$1" ]; do
-				case "$1" in
-				-h|--help)
-						cat >&2 <<END_HELP
+    # option: -d/--dry-run
+    : "${BOOTSTRAP_ACTION:=link}"
+    # option: -v/--verbose
+    : "${BOOTSTRAP_DEBUG:=false}"
+    # option: -k/--keep-going
+    : "${BOOTSTRAP_QUIT_ON_ERROR:=true}"
+    # option: -m/--manifest FILE
+    : "${BOOTSTRAP_MANIFEST_FILE:=bootstrap.manifest}"
+    # option: -- (rest are passed to ln)
+    : "${BOOTSTRAP_LN_ARGS:=-s}"
+
+    ## Handle command-line flags
+    # Basically an easier way of setting the above variables.
+    while [ -n "$1" ]; do
+        case "$1" in
+            -h|--help)
+                cat >&2 <<END_HELP
 Usage: ./bootstrap.sh [-d] [-v] [-k] [-m FILE] [-f] [-- LN_OPTS]
 OPTIONS:
-	-d, --dry-run
-		Only print what would happen.
-	-v, --verbose
-		Be more verbose about things.
-	-k, --keep-going
-		Keep going after an error.
-	-f, --force
-		Force linking.  Passes -f to ln.
-	-m FILE, --manifest FILE
-		Use FILE as manifest.
-		Default: bootstrap.manifest.
-	--	Signify end of options.  The rest are passed to ln.
+    -d, --dry-run
+        Only print what would happen.
+    -v, --verbose
+        Be more verbose about things.
+    -k, --keep-going
+        Keep going after an error.
+    -f, --force
+        Force linking.  Passes -f to ln.
+    -m FILE, --manifest FILE
+        Use FILE as manifest.
+        Default: bootstrap.manifest.
+    --	Signify end of options.  The rest are passed to ln.
 END_HELP
-						exit
-						;;
-				-d|--dry-run)
-						BOOTSTRAP_ACTION=print
-						shift 1
-						;;
-				-v|--verbose)
-						BOOTSTRAP_DEBUG=true
-						shift 1
-						;;
-				-k|--keep-going)
-						BOOTSTRAP_QUIT_ON_ERROR=false
-						shift 1
-						;;
-				-m|--manifest)
-						case "$2" in
-						''|-*)
-								printf >&2 "Bad argument: '$2'"
-								exit 129
-								;;
-						esac
-						BOOTSTRAP_MANIFEST_FILE="$2"
-						shift 2
-						;;
-				-f|--force)
-						BOOTSTRAP_LN_ARGS="$BOOTSTRAP_LN_ARGS -f"
-						shift 1
-						;;
-				--)
-						BOOTSTRAP_LN_ARGS="$@"
-						break
-						;;
-				esac
-		done
+                exit
+                ;;
+            -d|--dry-run)
+                BOOTSTRAP_ACTION=print
+                shift 1
+                ;;
+            -v|--verbose)
+                BOOTSTRAP_DEBUG=true
+                shift 1
+                ;;
+            -k|--keep-going)
+                BOOTSTRAP_QUIT_ON_ERROR=false
+                shift 1
+                ;;
+            -m|--manifest)
+                case "$2" in
+                    ''|-*)
+                        printf >&2 "Bad argument: '$2'"
+                        exit 129
+                        ;;
+                esac
+                BOOTSTRAP_MANIFEST_FILE="$2"
+                shift 2
+                ;;
+            -f|--force)
+                BOOTSTRAP_LN_ARGS="$BOOTSTRAP_LN_ARGS -f"
+                shift 1
+                ;;
+            --)
+                shift 1
+                BOOTSTRAP_LN_ARGS="$@"
+                break
+                ;;
+        esac
+    done
 
-		## Main loop
-		while IFS='	' read -r source destination; do
-				# Ignore lines beginning with '#'
-				case "$source" in
-				'#'*)
-						if "$BOOTSTRAP_DEBUG"; then
-								printf >&2 'Skipping comment: %s %s\n' \
-										   "$source" "$destination"
-						fi
-						continue
-						;;
-				esac
-				
-				# Ignore empty lines, or lines with only SOURCE or DESTINATION
-				if [ -z "$source" ] || [ -z "$destination" ]; then
-						if "$BOOTSTRAP_DEBUG"; then
-								printf >&2 'Skipping line: %s\t%s\n' \
-										   "$source" "$destination"
-						fi
-						continue
-				fi
+    ## Main loop
+    while IFS='	' read -r source destination; do
+        # Ignore lines beginning with '#'
+        case "$source" in
+            '#'*)
+                if "$BOOTSTRAP_DEBUG"; then
+                    printf >&2 'Skipping comment: %s %s\n' \
+                           "$source" "$destination"
+                fi
+                continue
+                ;;
+        esac
 
-				# Do the thing
-				if ! dispatch "$source" "$destination"; then
-						printf >&2 'ERROR: %s -> %s\n' \
-								   "$source" "$destination"
-						if "$BOOTSTRAP_QUIT_ON_ERROR"; then
-								exit "$dispatch_error"
-						fi
-				fi
-		done < "$BOOTSTRAP_MANIFEST_FILE"
+        # Ignore empty lines, or lines with only SOURCE or DESTINATION
+        if [ -z "$source" ] || [ -z "$destination" ]; then
+            if "$BOOTSTRAP_DEBUG"; then
+                printf >&2 'Skipping line: %s\t%s\n' \
+                       "$source" "$destination"
+            fi
+            continue
+        fi
+
+        # Do the thing
+        if ! dispatch "$source" "$destination"; then
+            printf >&2 'ERROR: %s -> %s\n' \
+                   "$source" "$destination"
+            if "$BOOTSTRAP_QUIT_ON_ERROR"; then
+                exit "$dispatch_error"
+            fi
+        fi
+    done < "$BOOTSTRAP_MANIFEST_FILE"
 }
-
 
 ### Functions
 
 dispatch() { # dispatch SOURCE DESTINATION
-		# Depending on environment variables, do the linking or displaying or
-		# whatever of a source and a destination.
+    # Depending on environment variables, do the linking or displaying or
+    # whatever of a source and a destination.
 
-		## Variables
-		
-		src="$1"
-		dest="$2"
-		dispatch_error=0		# success
-		
-		## Sanitize pathnames
+    ## Variables
 
-		# If the SOURCE starts with ~, /, or $, keep it as-is; otherwise,
-		# prepend "$PWD/".
-		case "$src" in
-		'/'* | '~'* | '$'* ) ;;
-		*) src="$PWD/$src" ;;
-		esac
+    src="$1"
+    dest="$2"
+    dispatch_error=0		# success
 
-		# Convert ~ to $HOME in SOURCE and DESTINATION, to get around shell
-		# quoting rules.
-		src="$(printf '%s\n' "$src" | sed "s#^~#$HOME#")"
-		dest="$(printf '%s\n' "$dest" | sed "s#^~#$HOME#")"
+    ## Sanitize pathnames
 
-		## Do the thing
+    # If the SOURCE starts with ~, /, or $, keep it as-is; otherwise,
+    # prepend "$PWD/".
+    case "$src" in
+        '/'* | '~'* | '$'* ) ;;
+        *) src="$PWD/$src" ;;
+    esac
 
-		# /Always/ tell the user what we're doing.
-		printf >&2 "ln %s %s %s\n" "$BOOTSTRAP_LN_ARGS" "$src" "$dest"
-		
-		case "$BOOTSTRAP_ACTION" in
-		link) # actually ... do the links
-				ln $BOOTSTRAP_LN_ARGS "$src" "$dest" ||
-						dispatch_error="$?"
-				;;
-		print) ;; # already printed.
-		esac
+    # Convert ~ to $HOME in SOURCE and DESTINATION, to get around shell
+    # quoting rules.
+    src="$(printf '%s\n' "$src" | sed "s#^~#$HOME#")"
+    dest="$(printf '%s\n' "$dest" | sed "s#^~#$HOME#")"
 
-		return "$dispatch_error"
+    ## Do the thing
+
+    # /Always/ tell the user what we're doing.
+    if [ -f "$dest" ]; then
+        printf >&2 'mv %s %s.old\n' "$dest" "$dest"
+    fi
+    printf >&2 "ln %s %s %s\n" "$BOOTSTRAP_LN_ARGS" "$src" "$dest"
+
+    case "$BOOTSTRAP_ACTION" in
+        link) # actually ... do the links
+            # if DESTINATION exists, move it to DESTINATION.old
+            if [ -f "$dest" ]; then
+                mv "$dest" "$dest.old"
+            fi
+
+            ln $BOOTSTRAP_LN_ARGS "$src" "$dest" ||
+                dispatch_error="$?"
+            ;;
+        print) ;; # already printed.
+    esac
+
+    return "$dispatch_error"
 }
 
 ### Do the thing
