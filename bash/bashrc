@@ -14,28 +14,41 @@ BASH_SOURCE_LAST=(
 
 for f in "${BASH_SOURCE_FIRST[@]}"; do
     file="${XDG_CONFIG_HOME:-$HOME/.config}/bash/$f.bash"
-    [[ -r "$file" ]] && source "$file" # || echo >&2 "no '$file' found"
+    if [[ -r "$file" ]]; then
+        # echo >&2 "Sourcing '$file'"
+        source "$file"
+    else
+        :
+        # echo >&2 "No '$file' found"
+    fi
 done
 
 for file in "$XDG_CONFIG_HOME"/bash/*.bash; do
     file_base="${file##*/}"
-    memq "${file_base%.bash}" "${BASH_SOURCE_FIRST[@]}" && {
+    if memq "${file_base%.bash}" "${BASH_SOURCE_FIRST[@]}"; then
         # echo >&2 "'$file' in BASH_SOURCE_FIRST, skipping"
         continue
-    }
-    memq "${file_base%.bash}" "${BASH_SOURCE_LAST[@]}" && {
+    elif memq "${file_base%.bash}" "${BASH_SOURCE_LAST[@]}"; then
         # echo >&2 "'$file' in BASH_SOURCE_LAST, skipping"
         continue
-    }
-    [[ -r "$file" ]] && {
+    elif [[ -r "$file" ]]; then
         # echo >&2 "Sourcing '$file'"
         source "$file"
-    }
+    else
+        :
+        # echo >&2 "No '$file' found"
+    fi
     unset file_base
 done
 
 for f in "${BASH_SOURCE_LAST[@]}"; do
     file="${XDG_CONFIG_HOME:-$HOME/.config}/bash/$f.bash"
-    [[ -r "$file" ]] && source "$file" # || echo >&2 "no '$file' found"
-    true
+    if [[ -r "$file" ]]; then
+        source "$file"
+    else
+        :
+        #echo >&2 "No '$file' found"
+    fi
 done
+
+true
