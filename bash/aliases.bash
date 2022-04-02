@@ -8,7 +8,6 @@ sudo_cmds=(
     mount
     umount
     visudo
-    apk
 )
 for cmd in "${sudo_cmds[@]}"; do
     alias $cmd="sudo $cmd"
