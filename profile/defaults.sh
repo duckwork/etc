@@ -1,4 +1,5 @@
 # Default programs
 
-export EDITOR="$(which vim)" # TODO: change to emacs
+export EDITOR="$(which emacsclient)"
+export ALTERNATE_EDITOR=
 export VISUAL="$EDITOR"
