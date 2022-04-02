@@ -121,7 +121,7 @@ END_HELP
         case "$source" in
             '#'*)
                 if "$BOOTSTRAP_DEBUG"; then
-                    printf >&2 'Skipping comment: %s %s\n' \
+                    printf >&2 '%s %s\n' \
                            "$source" "$destination"
                 fi
                 continue
