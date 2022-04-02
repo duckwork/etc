@@ -17,6 +17,10 @@ profile/profile	~/.profile
 # Mail
 mail/mbsyncrc	~/.mbsyncrc
 
+# Xorg
+xorg/xinitrc	~/.xinitrc
+xorg/xsession	~/.xsession
+
 # Local Variables:
 # indent-tabs-mode: t
 # End:
