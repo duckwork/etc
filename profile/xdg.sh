@@ -22,9 +22,9 @@ export WEECHAT_HOME="$XDG_CONFIG_HOME/weechat"
 export LYNX_CFG="$XDG_CONFIG_HOME/lynx/lynx.cfg"
 
 # Xorg
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-$HOME}"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
-export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 # Notmuch
 export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/notmuch/config"

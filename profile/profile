@@ -1,6 +1,9 @@
 # ~/.profile -*- sh -*-
 # vim: ft=sh
 
+# Source system profile
+source /etc/profile
+
 # XDG directories
 export XDG_CONFIG_HOME="$HOME/etc"
 export XDG_CACHE_HOME="$HOME/var/cache"

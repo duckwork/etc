@@ -14,7 +14,7 @@ for cmd in "${sudo_cmds[@]}"; do
 done
 
 # LS
-alias ls='ls -F --color=auto'
+alias ls='ls -F --color=never'
 alias ll='ls -l'
 # tree
 alias tree='tree -F'

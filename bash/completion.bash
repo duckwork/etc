@@ -1,7 +1,15 @@
-# source completions
+# Completions.bash
+# Source bash completion libraries
 
-. /etc/bash_completion
+POSSIBLE_COMPLETION_FILES=(
+    /etc/bash_completion # Debian
+    /etc/profile.d/bash_completion.sh # Alpine
+    # I'm sure there are many more
+)
 
-# for file in /etc/bash_completion.d/*; do
-#		[ -r "$file" ] && source "$file"
-# done
+for candidate in "${POSSIBLE_COMPLETION_FILES[@]}"; do
+    if [[ -r "$candidate" ]]; then
+        source "$candidate"
+        break # XXX: Do I want this?
+    fi
+done
