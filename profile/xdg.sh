@@ -13,7 +13,7 @@ export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 mkdir -p "$XDG_CACHE_HOME"/less
 
 # Vim
-export VIMINIT="let \$MYVIMRC=\"$XDG_CONFIG_HOME/vim/vimrc\" | source \$MYVIMRC"
+export VIMINIT="source ${XDG_CONFIG_HOME:=$HOME/.config}/vim/vimrc"
 
 # Weechat
 export WEECHAT_HOME="$XDG_CONFIG_HOME/weechat"
@@ -25,3 +25,6 @@ export LYNX_CFG="$XDG_CONFIG_HOME/lynx/lynx.cfg"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
+
+# Notmuch
+export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/notmuch/config"
