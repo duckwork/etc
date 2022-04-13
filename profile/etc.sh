@@ -2,7 +2,7 @@
 
 export GUILE_INSTALL_LOCALE=0
 export TZ=America/Chicago
-export QT_STYLE_OVERRIDE=adwaita-qt
+#export QT_STYLE_OVERRIDE=adwaita-qt
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/keyring/ssh"
 
 export CDPATH=:~ # thanks june :)
