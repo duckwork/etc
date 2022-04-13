@@ -24,3 +24,6 @@ alias lake='make PREFIX=~/usr'
 
 # bash meta
 alias rebash='source ~/.bash_profile'
+
+# Debugging
+alias emacs_goddamnit='pushd ~/.emacs.d;emacs --debug-init;popd'
