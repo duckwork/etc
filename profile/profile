@@ -11,7 +11,17 @@ export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
 
 # source files in $XDG_CONFIG_HOME/profile
 if [ -d "$XDG_CONFIG_HOME/profile" ]; then
-		for file in "$XDG_CONFIG_HOME"/profile/*.sh; do
-				[ -r "$file" ] && . "$file"
-		done
+        for file in "$XDG_CONFIG_HOME"/profile/*.sh; do
+                [ -r "$file" ] && . "$file"
+        done
 fi
+
+# refresh profile
+reprofile() {
+    printf "Loading ~/.profile..." >&2
+    if . "$HOME/.profile"; then
+        echo "OK." >&2
+    else
+        echo "ERROR!" >&2
+    fi
+}
